@@ -57,11 +57,11 @@ But as we run in to that problem, the 'awk' is not working with a lot of files (
 
 
 ## Urls 
-For scraping we rely on urls that were  gathered manually by looking up places in google maps and copy the shortened urls in to the .csv that then will be used by the scraper. 
+For scraping we rely on urls that were both scraped using chrome extension 'Simple scraper' and gathered manually by looking up places in google maps and copy the shortened urls in to the .csv that then will be used by the scraper. 
 For our project we took two samples so far:
 
-1. Public transport stations and gas stations alongside the highways in Switzerland. The goal is to monitor traffic during the outbreak and compare frequencies depending 	on the measures taken by the government.
-2. A list of stores was scraped via R from "Migros" and "Coop" - the two largest grocery-store chains in Switzerland. The list was the randomised to collect the urls from Google Maps. Then the urls were collected manually and added to the list of urls.
+1. Public transport stations and gas stations alongside the highways in Switzerland. The goal is to monitor traffic during the outbreak and compare frequencies depending on the measures taken by the government.
+2. A list of stores was scraped via R from "Migros" and "Coop" - the two largest grocery-store chains in Switzerland. The list was then randomised to collect the urls from Google Maps. Then the urls were collected manually and added to the list of urls.
 
 
 ## Scraping initialisation
@@ -101,7 +101,7 @@ As mentioned above, there will be a lot of files in /data. Thus, it is recommend
 
 
 
-## Data visulaisation
+## Data visualisation
 
 For the data visualisation we used R.
 Initially we grab the longitude and latitude positions of the places related to the urls by running long_lat.py.
