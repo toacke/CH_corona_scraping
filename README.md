@@ -13,7 +13,7 @@
 This project is about scrapping google's popular times from public transportation, gas stations at highways and grocery shops in switzerland.
 
 ## Data scraping
-First, we like to thank [Philip Shemella](https://github.com/philshem/gmaps_popular_times_scraper) - you need to read this, otherwise the scripts won't run! - for his work and the scraper he built that we modified and used for collecting data.
+First, we like to thank [Philip Shemella](https://github.com/philshem/gmaps_popular_times_scraper) - you need to read this, otherwise the scripts won't run! - for his work and the scraper he built that we modified and used for collecting data. Since our script is built on his initial imputs, we will not explain here some dependencies already explained in Philip's repository.
 
 As you can find every information on running the scraper in his GitHub repository we will focus on our work here:
 
@@ -60,7 +60,7 @@ But as we run in to that problem, the 'awk' is not working with a lot of files (
 For scraping we rely on urls that were both scraped using chrome extension 'Simple scraper' and gathered manually by looking up places in google maps and copy the shortened urls in to the .csv that then will be used by the scraper. 
 For our project we took two samples so far:
 
-1. Public transport stations and gas stations alongside the highways in Switzerland. The goal is to monitor traffic during the outbreak and compare frequencies depending on the measures taken by the government.
+1. Public transport stations in Switzerland. The goal is to monitor traffic during the outbreak and compare frequencies depending on the measures taken by the government.
 2. A list of stores was scraped via R from "Migros" and "Coop" - the two largest grocery-store chains in Switzerland. For each grocery-store chain we selected a stratified random sample selecting a number of stores per each canton (6 when it was possible, otherwise 3). The aim here is to display how the coronavirus influence Swiss people's consumption patterns.
 
 
