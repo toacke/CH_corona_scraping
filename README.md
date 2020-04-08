@@ -61,7 +61,7 @@ For scraping we rely on urls that were both scraped using chrome extension 'Simp
 For our project we took two samples so far:
 
 1. Public transport stations and gas stations alongside the highways in Switzerland. The goal is to monitor traffic during the outbreak and compare frequencies depending on the measures taken by the government.
-2. A list of stores was scraped via R from "Migros" and "Coop" - the two largest grocery-store chains in Switzerland. The list was then randomised to collect the urls from Google Maps. Then the urls were collected manually and added to the list of urls.
+2. A list of stores was scraped via R from "Migros" and "Coop" - the two largest grocery-store chains in Switzerland. For each grocery-store chain we selected a stratified random sample selecting a number of stores per each canton (6 when it was possible, otherwise 3). The aim here is to display how the coronavirus influence Swiss people's consumption patterns.
 
 
 ## Scraping initialisation
