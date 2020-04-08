@@ -1,0 +1,160 @@
+---
+name: "Difference in popular times for trainstations"
+title: "Difference in popular times for trainstations"
+runtime: shiny
+output: 
+  flexdashboard::flex_dashboard:
+    social: menu
+    surce_code: embed
+    orientation: columns
+    vertical_layout: scroll
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(ggswissmaps)
+library(shiny)
+library(dplyr)
+library(ggplot2)
+
+
+load("city.Rdata")
+load("Lakes.RData")
+load("Kantone.RData")
+library("lubridate")
+#aggregate data 
+city[city$hour_of_day==24,'hour_of_day'] <- 0 # quick and dirty way, did not changed the other variables.
+city$Name <- gsub("FFS","SBB", city$Name)
+city$Name
+daily <- city%>%
+  group_by(URL,date)%>%
+  summarise(Difference = as.numeric(mean(diff, na.rm = T)),
+                        long = unique(long),
+                        lat = unique(lat),
+                        Name = unique(Name),
+                        group = unique(group))
+daily <- daily[, -1]
+daily$ind <- as.integer(daily$Difference/10+1)
+daily$date <- as.Date(as.character(daily$date), "%Y%m%d")
+
+set_shiny_plot_height <- function(session, output_width_name){
+   function() { 
+     session$clientData[[output_width_name]] 
+   }
+}
+
+```
+
+
+Daily differences in popularity of train stations {data-icon="fa-list"}
+====================================================================
+
+## The effects of COVID-19 on Swiss mobility and consumption behaviors
+
+The following data aims at displaying the effects of COVID-19 in relation to people’s mobility and pattern of consumption. This project is inspired and built on a [previous scraping project](https://github.com/philshem/gmaps_popular_times_scraper) and by the opendata community ‘Monitoring COVID-19 effects’ launched by the [statistical office of the Canton Zurich](https://db.schoolofdata.ch/event/7#top).
+The data is extrapolated from Google “Popular time” information.
+</n>
+
+
+<b>In the following day, more data on the consumption patterns of the Swiss population will be uploaded.</b>
+
+Tobias Ackermann and Giorgio Cassina
+
+
+##
+
+
+### <b>MAPS</b>
+
+Difference in the frequency of people (current frequency – average frequency) for each single train station.
+
+  
+```{r}
+fillCol(height = 600, flex = c(NA, 1), 
+        inputPanel(
+          sliderInput("day", "Choose a day:",
+                  min = min(daily$date), 
+                  max = max(daily$date),
+                  value = min(daily$date),
+                  animate = TRUE
+                  )
+        ),
+        plotOutput("dailymap", height = "100%")
+)
+
+output$dailymap <- renderPlot({
+daily[which(daily$date == input$day),]%>%
+    ggplot(aes(x = long,y = lat, group = group))+
+    geom_polygon(aes(x = long,y = lat, group = group),data = g1k15, fill = "#272d3f")+
+    theme_void()+
+    coord_equal()+
+    geom_polygon(aes(x = long, y = lat, group = group),#lakes
+                 data = g1s15, fill ="#3c4252", 
+                 alpha = 1, 
+                 color = "#3c4252", 
+                 size = .1, 
+                 lty = "solid")+
+    theme(panel.background = element_rect(fill = "#171519",#background
+                                          colour = "#171519",
+                                          size = 0.5, linetype = "solid"))+
+    geom_path(aes(x = long,#adding borders of the cantons
+                  y = lat,
+                  group = group),
+              data = g1k15,
+              color = "#3c4252" ,
+              size = 0.2)+
+      geom_point(aes(x = long, 
+                      y = lat, group = group, colour = Difference*-1),
+                      data = daily[which(daily$date == input$day),],
+                      size = daily[which(daily$date == input$day),]$Difference/10+1)+ 
+      scale_colour_gradient(high= "#6897bb",low ="#ffa600", limits = c(-80,20))+
+      labs(colour="Difference")
+    
+})
+```
+
+
+
+### <b>DEVELOPMENT OVER TIME FOR SINGLE STATIONS</b>
+
+
+```{r}
+fillCol(height = 600, flex = c(NA, 1), 
+        inputPanel(
+          selectizeInput("station", "Choose a train station", 
+                         choices = unique(as.character(daily$Name)), 
+                         selected = " Baden FFS")
+        ),
+        plotOutput("wordPlot", height = "100%")
+)
+
+output$wordPlot <- renderPlot({
+  daily[daily$Name %in% input$station,] %>%
+    ggplot(aes(x=date, y=Difference*-1)) +
+      geom_line(color = '#ffa600', size=1) +
+      geom_ribbon(aes(ymax = pmax(0,Difference *-1),ymin = pmin(0,Difference*-1)),
+                  fill='#ffa600', 
+                  alpha=0.4) +
+      labs(y="Percentage", x = "Date") +
+      ggtitle(paste0(input$station, " - Difference in frequency from \n", min(daily$date)," until ", max(daily$date)))+
+      theme(plot.title = element_text(hjust = 0.5), 
+            axis.text.x = element_text(angle=45, hjust = 1, vjust = 1),
+            panel.background = element_rect(fill='#272d3f'),
+            panel.grid.minor = element_blank()) + #,legend.key = element_rect(fill = "#2F2B33"),
+      scale_x_date(breaks = unique(daily$date), 
+                   date_labels = "%d-%m-%y") +
+      scale_y_continuous(breaks = seq(-60,20, by = 20), 
+                         limits = c(-60,20), 
+                         labels = paste0(seq(-60,20, by = 20),'%'))
+},height = 450)
+```
+
+
+
+
+
+
+
+
+
+
