@@ -101,7 +101,7 @@ As mentioned above, there will be a lot of files in /data. Thus, it is recommend
 
 
 
-## datavizulaisation
+## Data visulaisation
 
 For the data visualisation we used R.
 Initially we grab the longitude and latitude positions of the places related to the urls by running long_lat.py.
