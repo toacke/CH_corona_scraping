@@ -1,0 +1,6 @@
+#FOLDERS TO NOT INCLUDE
+/__pycache__
+/.idea
+
+
+#FILES TO NOT INCLUDE

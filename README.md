@@ -109,7 +109,33 @@ Then we prepared the data.
 
 The visualisations were done in R with ggplot and at a later stage then implemented in a shiny-app.
 
+## Data mering and maintenance
 
+As said before /data can get very full. Thus we optimized the workflow:
+
+create Folder /merge and use
+
+    awk 'FNR==NR||FNR>1' data/*.csv > merge/all.csv
+    
+Rename the first .csv to something like "all_data.csv"
+
+Then you can run the following each time the data should be aggregated: 
+
+    awk 'FNR==NR||FNR>1' data/*.csv > merge/all.csv
+    
+    awk 'FNR==NR||FNR>2' merge/*.csv > NAME_OF_FULL_DATA.csv
+    
+Then the data, html and log folder can be emptied with
+
+    rm data/*.csv
+    rm html/*.html
+    rm logs/*.log
+    
+As the data will again written in the main folder one can also use the command line to run the R script to deploy the app.
+
+    Rscript NAME_OF_SCRIPT.R
+
+With this it is also possible to automatize the upload to the app with crontab.
 
 
 
